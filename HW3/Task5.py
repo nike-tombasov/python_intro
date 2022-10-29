@@ -1,18 +1,20 @@
-print("Homework 3. Task 3. Set list of real numbers.", 
-        "Return difference between min and max fractional part of decimals from list")
+print("Homework 3. Task 5. From inserted number set list of Fibonacci numbers", 
+        "also including negative sequence.")
 print()
 
-n = 10
+n = abs(int(input("Enter your number for Fibonacci sequence: ")))
+lst, positiv_lst = [-1], [1]
+fib, fib1, fib2 = 0, 0, 1
 
-lst = [1]
-fib1, fib2 = 0, 1
-fib = 0
 for i in range(1, n):
     fib = fib1 + fib2
     fib1 = fib2
     fib2 = fib
-    lst.append(fib)
+    lst.append(-fib)
+    positiv_lst.append(fib)
 
-print(lst)
+lst.reverse()
+lst.append(0)
+lst += positiv_lst
 
-# F(-n)=(-1)^{n+1} *  F(n)
+print("Fibonacci and negafibonacci sequence: ", lst)
