@@ -1,12 +1,13 @@
-print("Homework 4. Task 1. Round up inserted number to the power of", 
-        "another inserted number formed as 10 ** (-1) <= 1 <= 10 ** (-10)")
+print("Homework 4. Task 1. Option 1. Round up float number to the power of", 
+        "inserted number formed as 10 ** (-1) <= 1 <= 10 ** (-10)")
 print()
 
-d = int(input("Enter your dot number in range 10 ** (-1) <= 1 <= 10 ** (-10): "))
-# d = 0.001
-num = input("Enter your decimal float number: ")
-# num = 123.456789123456789
+from random import uniform
+from decimal import Decimal
 
+# d = input("Enter your dot number in range 10 ** (-1) <= 1 <= 10 ** (-10): ")
+d = Decimal("0.001")
+num = uniform(0, 100)
 
-print(len(str(d).split(".")[1]))
-# k = len(num.split(".")[1])
+print("Float number to round up:", num)
+print(f"Rounded number:", round(num, len(str(d).split(".")[1])))
