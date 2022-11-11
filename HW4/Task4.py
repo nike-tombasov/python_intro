@@ -15,7 +15,7 @@ if k:
         file_name = "Polynome" + str(i) + ".txt"
         
         for j in reversed(range(k + 1)):
-            ratio = randint(0,2)
+            ratio = randint(0, 101)
             if ratio > 1:
                 if j > 1:
                     poly_lst.append(str(ratio) + 'x^' + str(j))
@@ -30,10 +30,14 @@ if k:
                     poly_lst.append('x')
                 else:
                     poly_lst.append(str(ratio))
-        
-        poly = " + ".join(poly_lst) + " = 0"
-        print("Polynome " + str(i) + ":", poly)
-        with open(file_name, 'w') as data:
-            data.write(poly)
+
+        if poly_lst:        
+            poly = " + ".join(poly_lst) + " = 0"
+            print("Polynome " + str(i) + ":", poly)
+            with open(file_name, 'w') as data:
+                data.write(poly)
+        else:
+            print("Polynome created as empty. Try again")
+            exit()
 else: 
     print("Can't create polynome with power of 0")
