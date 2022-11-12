@@ -1,7 +1,7 @@
 print("Homework 5. Task 4. Realize RLE algorithm: data compression and decompression")
 print()
 
-text = "AAABBBccccCCCCQQQQQ"
+text = open('orig_text.txt', 'r').read()
 print("Original text:", text)
 
 
@@ -25,17 +25,22 @@ else:
         encoded += str(count) + prev_char
 
 print("Encoded text:", encoded)
-
+with open('encoded.txt', 'w') as data:
+    data.writelines(encoded)
 
 # DECODE
 
+with open('encoded.txt', 'r') as data:
+    encoded_text = data.read()
 decoded = ''
 count = ''
-for char in encoded:
+for char in encoded_text:
     if char.isdigit():
         count += char
     else:
         decoded += char * int(count)
         count = ''
 
+with open('decoded.txt', 'w') as data:
+    data.writelines(decoded)
 print("Decoded text:", decoded)
