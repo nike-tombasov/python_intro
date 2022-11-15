@@ -2,41 +2,50 @@ print("""Homework 6. Task 1. Make calculator that takes string of input data.
         Use +, -, *, / operations only with logical priority. 
         Additionaly include () operations with appropriate logical priority""", end="\n\n")
 
-# expression = input("Enter your expression: ")
-expression = 'A500-1000/5*10.5'
+import sys
 
-nums = '' # "1 -2 3"
-operats = '' # "+*"
-check = '0123456789/*-+.' # Input filter
+# expression = input("Enter your expression (only +,-,*,/ and numbers): ")
+expression = 'A500-411.12/5*10+600/6fefqwef+8.8'
 
-opers = { # Functions
-        '/': lambda x,y: x / y,
-        '*': lambda x,y: x * y,
-        '+': lambda x,y: x + y}
+nums = ''
+operations = ''
+cleared_expression = [] # Output visual
+check = '0123456789/*-+.'  # Input filtration
+ops_f = {  # Functions
+    '/': lambda x, y: x / y,
+    '*': lambda x, y: x * y,
+    '+': lambda x, y: x + y}
 
-
-for i in expression: # Split input to nums and operations
-    if i not in check:
+for i in expression:  # Split input to nums and operations
+    if i not in check:  # Filter
         pass
-    elif i.isdigit() or i == '.':
+    elif i.isdigit() or i == '.':  # Digits
         nums += i
-    elif i == '-':
+        cleared_expression.append(i)
+    elif i == '-':  # Negative for digits
         nums += ' ' + i
-        operats += '+'
-    else:
+        operations += '+'
+        cleared_expression.append(i)
+    else:  # Operations
         nums += ' '
-        operats += i
+        operations += i
+        cleared_expression.append(i)
 
-nums_lst = list(map(float, nums.split())) # Converting nums into list
-op_lst = list(operats) # Converting operations into list
+nums_lst = list(map(float, nums.split()))  # Converting nums into list
+op_lst = list(operations)  # Converting operations into list
 
-while len(nums_lst) > 1: # Calculation
-    for o in "/*+":
-        if o in op_lst:
-            i = op_lst.index(o)
-            nums_lst[i] = opers[o](nums_lst[i], nums_lst[i + 1])
-            del nums_lst[i + 1]
-            op_lst.remove(o)
+for op in ops_f:  # Calculation
+    for _ in range(op_lst.count(op)):
+        i = op_lst.index(op)
+        if op == '/' and nums_lst[i + 1] == 0:
+            sys.exit("Dividing by zero. Aborting calculation.")
+        nums_lst[i] = ops_f[op](nums_lst[i], nums_lst[i + 1])
+        del nums_lst[i + 1]
+        del op_lst[i]
 
-print(nums_lst[0])
- 
+if nums_lst[0] == int(nums_lst[0]):  # Clearing float .0
+    nums_lst[0] = int(nums_lst[0])
+
+# Output
+print('Calculation:')
+print(''.join(cleared_expression), "=", round(nums_lst[0], 12))
