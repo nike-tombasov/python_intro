@@ -12,3 +12,8 @@ for i in range(len(lst)):
     if i % 2 != 0:
         sum_odd += lst[i]
 print("Sum of every number in odd positions:", sum_odd)
+
+# for i in lst[1::2]:
+#     sum_odd += i
+
+# lst = [r(0, 10) for _ in range(10)]
