@@ -10,8 +10,11 @@ def main_menu():
     4 - Close programm''')
 
 
-def show_contacts(file_name):
-    print("List of contacts", end="\n\n")
+def show_contacts(file_name, var=0):
+    if var:
+        print("Contact preview:", end="\n\n")
+    else:
+        print("List of contacts:", end="\n\n")
     print("{:3} {:15} {:15} {:11} {:20} {}".format(*columns))
     with open(file_name, 'r') as file:
         for line in file:
@@ -26,17 +29,23 @@ def show_new(data):
 
 
 def new_contact_input():
-    f_name = input("Insert contact's first name: ")
-    l_name = input("Insert contact's last name: ")
-    birthday = input("Insert contact's birthday: ")
-    occupation = input("Insert contact's occupation: ")
-    phone_num = input("Insert contact's phone number: ")
+    f_name = input("*Insert contact's first name: ")
+    l_name = input("*Insert contact's last name: ")
+    birthday = input("*Insert contact's birthday: ")
+    occupation = input("*Insert contact's occupation: ")
+    new_contact = [f_name, l_name, birthday, occupation, [], 0]
+    new_contact[4].append(input("*Insert contact's phone number: "))
+
+    while input("*Add one more phone number? Y/N ").capitalize() == 'Y':
+        new_contact[5] = 1
+        new_contact[4].append(input("*Insert contact's another phone number: "))
+
     print()
-    return f_name, l_name, birthday, occupation, phone_num
+    return new_contact
 
 
 def import_file_input():
-    return input("Insert file name to import: ")
+    return input("*Insert file name to import: ")
 
 
 def new_contact_status(status):
