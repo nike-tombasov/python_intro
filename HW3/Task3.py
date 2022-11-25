@@ -21,3 +21,6 @@ print("Option #1. Difference between min and max fractional part:", max(lst) - m
 #     lst[i] = round(lst[i] - lst[i] // 1, 5)
 
 # print("Option #2. Difference between min and max fractional part:", max(lst) - min(lst))
+
+
+# lst = [round((uniform(0, 10), 2) for _ in range(lst_lenght)]

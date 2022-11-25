@@ -19,3 +19,9 @@ else:
         result_lst.append(lst[i]*lst[-1 - i])
 
 print(result_lst)
+
+
+# for i in range((len(lst) + 1) // 2):
+#     result_lst.append(lst[i]*lst[-1 - i])
+
+# lst = [r(0, 10) for _ in range(lst_lenght)]
