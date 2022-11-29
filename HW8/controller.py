@@ -1,12 +1,13 @@
-# import os.path
-# import sys
-# import backend
+import os.path
 import ui
 import frontend
 import sqlite3
 
 def run():
+    
     while True:
+        if not os.path.exists('school.db'):
+            ui.no_db()
         conn = sqlite3.connect('school.db')
         cur = conn.cursor()
 

@@ -1,5 +1,16 @@
 import frontend
 import backend
+import dbinit
+import sys
+
+def no_db():
+    print("Database doesn't found!", end="\n\n")
+    if input("*Initialize default version of database? Y/N ").capitalize() == 'Y':
+        dbinit.initialize_db()
+        print()
+        print("Database seccessfully initialized!", end="\n\n")
+    else:
+        sys.exit("Programm closed.")
 
 def save_query_csv(query):
     if input("*Save sheet to CSV file? Y/N ").capitalize() == 'Y':
@@ -63,9 +74,9 @@ def new_record(cur, conn):
 
         match action:
             case 1: # Add to grades
-                grade = input('Insert new grade name: ')
-                start = int(input('Insert start year: '))
-                graduat = int(input('Insert graduation year: '))
+                grade = input('*Insert new grade name: ')
+                start = int(input('*Insert start year: '))
+                graduat = int(input('*Insert graduation year: '))
                 frontend.new_record_preview([grade, start, graduat], action)
                 
                 if input("*Save this grade? Y/N ").capitalize() == 'Y':
@@ -77,15 +88,15 @@ def new_record(cur, conn):
                     frontend.new_record_status(status, action)
             
             case 2: # Add to pupils
-                first = input('Insert first name: ').title()
-                last = input('Insert last name: ').title()
-                birth = input('Insert date of birth: ')
+                first = input('*Insert first name: ').title()
+                last = input('*Insert last name: ').title()
+                birth = input('*Insert date of birth: ')
 
                 cur.execute('''SELECT grade_name, start_year, graduation_year 
                             FROM grades''')
                 frontend.dipslay_sheet(cur.fetchall(), 1)
 
-                grade = input('Insert grade name from list above: ').capitalize()
+                grade = input('*Insert grade name from list above: ').capitalize()
                 cur.execute(f'SELECT grade_id FROM grades where grade_name="{grade}"')
                 grade_id = cur.fetchone()[0]
                 new = [backend.get_next_id(cur, action), first, last, birth, grade_id]
