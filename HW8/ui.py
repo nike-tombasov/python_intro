@@ -1,57 +1,125 @@
-import os.path
-import sys
-import backend
 import frontend
+import backend
 
-def run():
+def save_query_csv(query):
+    if input("*Save sheet to CSV file? Y/N ").capitalize() == 'Y':
+        file_name = input("*Enter file name: ")
+        if backend.save_file_csv(query, file_name):
+            print("File seccessfully saved!")
+
+
+def display_db(cur, conn):
     while True:
-        frontend.main_menu()
+        frontend.display_menu()
         action = input('*Choose action to do: ')
+        if action.isdigit():
+            action = int(action)
+        print()
+        
+        match action:
+            case 1: # Grades list
+                cur.execute('''SELECT grade_name, start_year, graduation_year 
+                            FROM grades''')
+                query = cur.fetchall()
+                frontend.dipslay_sheet(query, action)
+                save_query_csv(query)
+            case 2: # Pupils list
+                cur.execute('''SELECT pupil_id, first_name, last_name, 
+                            birthday, grade_name, graduation_year
+                            FROM pupils LEFT JOIN grades 
+                            ON grades.grade_id = pupils.grade_id''')
+                query = cur.fetchall()
+                frontend.dipslay_sheet(query, action)
+                save_query_csv(query)
+            case 3: # Grades with pupils list
+                cur.execute('''SELECT grade_name, start_year, graduation_year, 
+                            first_name, last_name, birthday
+                            FROM grades INNER JOIN pupils 
+                            ON grades.grade_id = pupils.grade_id''')
+                query = cur.fetchall()
+                frontend.dipslay_sheet(query, action)
+                save_query_csv(query)
+            case 4: # Full database
+                cur.execute('''SELECT grade_name, start_year, graduation_year, 
+                            first_name, last_name, birthday
+                            FROM grades LEFT JOIN pupils 
+                            ON grades.grade_id = pupils.grade_id''')
+                query = cur.fetchall()
+                frontend.dipslay_sheet(query, action)
+                save_query_csv(query)
+            case 5: # Return to main
+                break
+            case _: # Exception
+                print("Wrong input. Try again!", end="\n\n")
+
+def new_record(cur, conn):
+    while True:
+        frontend.new_record_menu()
+        status = 0
+        action = input('*Choose table for new record: ')
+        if action.isdigit():
+            action = int(action)        
         print()
 
         match action:
-            case '1': # Show base in console
-                frontend.show_contacts('database.csv')
-            
-            case '2': # New contact init
-                status = 0
-                new_contact = frontend.new_contact_input()
+            case 1: # Add to grades
+                grade = input('Insert new grade name: ')
+                start = int(input('Insert start year: '))
+                graduat = int(input('Insert graduation year: '))
+                frontend.new_record_preview([grade, start, graduat], action)
                 
-                if new_contact[5]: # for multiphone contact
-                    backend.pre_new_multiphone_contact(new_contact)
-                    frontend.show_contacts('temp.csv', 1)
-                    if input("*Save this contact? Y/N ").capitalize() == 'Y':
-                        backend.new_multiphone_save()
-                        status = 1
-                        frontend.new_contact_status(status)
-                    else:
-                        frontend.new_contact_status(status)
-                else: # for simple contact
-                    new_contact[4] = new_contact[4][0]
-                    new_contact = backend.pre_new_line(new_contact)
-                    frontend.show_new(new_contact)
-                    if input("*Save this contact? Y/N ").capitalize() == 'Y':
-                        backend.new_contact_save(new_contact)
-                        status = 1
-                        frontend.new_contact_status(status)
-                    else:
-                        frontend.new_contact_status(status)
-            
-            case '3': # Importing file to database
-                status = 0
-                file_name = frontend.import_file_input()
-                if os.path.isfile(file_name):
-                    frontend.show_contacts(file_name)    
-                    if input("*Import file to contacts? Y/N ").capitalize() == 'Y':
-                        backend.import_data(file_name)
-                        status = 1
-                        frontend.import_status(status)
-                    else:
-                        status = 2
-                        frontend.import_status(status)
+                if input("*Save this grade? Y/N ").capitalize() == 'Y':
+                    backend.new_record(cur, action, [backend.get_next_id(cur, action), grade, start, graduat])
+                    conn.commit()
+                    status = 1
+                    frontend.new_record_status(status, action)
                 else:
-                    frontend.import_status(status)
+                    frontend.new_record_status(status, action)
+            
+            case 2: # Add to pupils
+                first = input('Insert first name: ').title()
+                last = input('Insert last name: ').title()
+                birth = input('Insert date of birth: ')
 
-            case '4': # Exit
-                sys.exit("Programm closed.")
-            # case '5':
+                cur.execute('''SELECT grade_name, start_year, graduation_year 
+                            FROM grades''')
+                frontend.dipslay_sheet(cur.fetchall(), 1)
+
+                grade = input('Insert grade name from list above: ').capitalize()
+                cur.execute(f'SELECT grade_id FROM grades where grade_name="{grade}"')
+                grade_id = cur.fetchone()[0]
+                new = [backend.get_next_id(cur, action), first, last, birth, grade_id]
+                frontend.new_record_preview(new, action)
+                
+                if input("*Save this pupil? Y/N ").capitalize() == 'Y':
+                    backend.new_record(cur, action, new)
+                    conn.commit()
+                    status = 1
+                    frontend.new_record_status(status, action)
+                else:
+                    frontend.new_record_status(status, action)
+            
+            case 3: # Return to main
+                break
+            case _: # Exception
+                print("Wrong input. Try again!", end="\n\n")
+
+
+
+
+
+
+
+
+
+        # match action:
+        #     case '1': # Pupils list
+        #         pass
+        #     case '2': # Grades list
+        #         pass
+        #     case '3': # Grades with pupils list
+        #         pass
+        #     case '4': # Full database
+        #         pass
+        #     case '5': # Return to main
+        #         break

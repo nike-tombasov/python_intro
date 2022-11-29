@@ -1,4 +1,4 @@
-import ui
+import controller
 
 if __name__ == '__main__':
-    ui.run()
+    controller.run()

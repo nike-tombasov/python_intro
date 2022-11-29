@@ -1,64 +1,72 @@
-columns = ['ID', 'First name', 'Last name',
-           'Birthday', 'Occupation', 'Phone number']
+# import pandas as pd
+# import numpy as np
 
 
 def main_menu():
     print('''Main menu. Aviable actions:\n
-    1 - Show contacts
-    2 - Create new contact
-    3 - Import contacts from file
+    1 - Show database
+    2 - Make new record
+    3 - Edit record
     4 - Close programm''')
 
-
-def show_contacts(file_name, var=0):
-    if var:
-        print("Contact preview:", end="\n\n")
-    else:
-        print("List of contacts:", end="\n\n")
-    print("{:3} {:15} {:15} {:11} {:20} {}".format(*columns))
-    with open(file_name, 'r') as file:
-        for line in file:
-            print("{:3} {:15} {:15} {:11} {:20} {}".format(
-                *line.split(";")), end='')
-    print()
+def display_menu():
+    print('''Show database. Aviable actions:\n
+    1 - Display list of grades
+    2 - Display list of pupils
+    3 - Display list of grades with pupils
+    4 - Display full database list of grades and pupils
+    5 - Return to main menu''')
 
 
-def show_new(data):
-    print("{:3} {:15} {:15} {:11} {:20} {}".format(*columns), end="\n\n")
-    print("{:3} {:15} {:15} {:11} {:20} {}".format(*data))
+def new_record_menu():
+    print('''Add new record. Aviable tables:\n
+    1 - Add to grades
+    2 - Add to pupils
+    3 - Return to main menu''')
 
 
-def new_contact_input():
-    f_name = input("*Insert contact's first name: ")
-    l_name = input("*Insert contact's last name: ")
-    birthday = input("*Insert contact's birthday: ")
-    occupation = input("*Insert contact's occupation: ")
-    new_contact = [f_name, l_name, birthday, occupation, [], 0]
-    new_contact[4].append(input("*Insert contact's phone number: "))
+def dipslay_sheet(query, layout):
+    if layout == 1: # Grades sheet
+        print("List of grades", end="\n\n")
+        print("{:6} {:<12} {:<12}".format(*('Grade', 'Start year', 'Graduation year')))
+        for line in query:
+            print("{:6} {:<12} {:<12}".format(*tuple(map(str,line))))
+    elif layout == 2: # Pupils sheet
+        print("List of pupils", end="\n\n")
+        print("{:>4} {:15} {:15} {:11} {:10}".format(*('ID', 'First Name', 'Last Name', 'Birthday', 'Grade')))
+        for line in query:
+            print("{:>4} {:15} {:15} {:11} {:10}".format(*tuple(map(str,line))))
+    elif layout == 3: # Grades with pupils sheet
+        print("List of grades with pupils", end="\n\n")
+        print("{:6} {:<12} {:<16} {:15} {:15} {:11}".format(*('Grade', 'Start year', 'Graduation year', 'First Name', 'Last Name', 'Birthday')))
+        for line in query:
+            print("{:6} {:<12} {:<16} {:15} {:15} {:11}".format(*tuple(map(str,line))))
+    elif layout == 4: # Full database sheet
+        print("List of grades with pupils", end="\n\n")
+        print("{:6} {:<12} {:<16} {:15} {:15} {:11}".format(*('Grade', 'Start year', 'Graduation year', 'First Name', 'Last Name', 'Birthday')))
+        for line in query:
+            print("{:6} {:<12} {:<16} {:15} {:15} {:11}".format(*tuple(map(str,line))))
 
-    while input("*Add one more phone number? Y/N ").capitalize() == 'Y':
-        new_contact[5] = 1
-        new_contact[4].append(input("*Insert contact's another phone number: "))
 
-    print()
-    return new_contact
+def new_record_preview(new_line, layout):
+    if layout == 1: # Grades sheet
+        print("New grade", end="\n\n")
+        print("{:6} {:<12} {:<12}".format(*('Grade', 'Start year', 'Graduation year')))
+        print("{:6} {:<12} {:<12}".format(*tuple(map(str,new_line))))
+    elif layout == 2: # Pupils sheet
+        print("New pupil", end="\n\n")
+        print("{:>4} {:15} {:15} {:11} {:10}".format(*('ID', 'First Name', 'Last Name', 'Birthday', 'Grade')))
+        print("{:>4} {:15} {:15} {:11} {:10}".format(*tuple(map(str,new_line))))
 
-
-def import_file_input():
-    return input("*Insert file name to import: ")
-
-
-def new_contact_status(status):
+def new_record_status(status, layout):
     if status == 1:
-        print("New contact seccessfully created!", end="\n\n")
+        print()        
+        if layout == 1:
+            print("New grade seccessfully created!", end="\n\n")
+        elif layout == 2:
+            print("New pupil seccessfully created!", end="\n\n")
     else:
-        print("Creating new contact aborted by user", end="\n\n")
+        print()
+        print("Creating new record aborted by user", end="\n\n")
 
 
-def import_status(status):
-    if status == 1:
-        print("File seccessfully imported!", end="\n\n")
-    elif status == 2:
-        print("Import aborted by user.", end="\n\n")
-    else:
-        print("File wasn't founded. Try again.", end="\n\n")
