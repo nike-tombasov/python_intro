@@ -48,7 +48,9 @@ def initialize_db():
     pupils_main = [
         ('0001', 'Tom', 'Ridle', '12/24/1985', '01'),
         ('0002', 'Michael', 'Jonhson', '05/06/1992', '02'),
-        ('0003', 'Frank', 'Codd', '01/18/1986', '12')
+        ('0003', 'Frank', 'Codd', '01/18/1986', '12'),
+        ('0004', 'Mike', 'Torry', '02/11/1999', '01'),
+        ('0005', 'Fred', 'De Zack', '', '01')
     ]
 
     grades_main = [

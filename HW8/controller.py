@@ -22,12 +22,14 @@ def run():
             case '2': # New record
                 ui.new_record(cur, conn)    
 
-            case '3': # Editing records
+            case '3': # Editing records                   
                 pass
+                ui.record_editor(cur, conn)
 
             case '4': # Exit
                 conn.close()
                 print("Programm closed.")
                 break
+
             case _: # Exception
                 print("Wrong input. Try again!", end="\n\n")
