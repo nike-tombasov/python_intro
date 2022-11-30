@@ -9,7 +9,7 @@ def initialize_db():
         first_name TEXT,
         last_name TEXT,
         birthday TEXT,
-        grade_id TEXT);
+        grade_id INT);
     ''')
 
     cur.execute('''CREATE TABLE IF NOT EXISTS grades(
