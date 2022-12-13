@@ -2,7 +2,7 @@ from telegram import Update
 from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 import bot_model
 
-app = ApplicationBuilder().token("5880485971:AAHVZeNVgcCsNfY463ucia1LO2-r9M-60i0").build()
+app = ApplicationBuilder().token("").build()
 
 #Hello
 app.add_handler(CommandHandler("hello", bot_model.hello))
